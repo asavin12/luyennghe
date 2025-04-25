@@ -1,0 +1,490 @@
+body {
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #B7B2AF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.home-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+.home-link:hover {
+    background-color: #45a049;
+}
+
+.deck-selector {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.deck-selector select {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.jump-to-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#jumpToInput {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100px;
+    text-align: center;
+}
+
+#jumpToButton {
+    padding: 5px 10px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    touch-action: manipulation;
+}
+
+#jumpToButton:hover {
+    background-color: #1976D2;
+}
+
+.hidden {
+    display: none;
+}
+
+.audio-controls {
+    margin-bottom: 20px;
+}
+
+.audio-controls audio {
+    width: 100%;
+}
+
+.progress {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.loop-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 10px;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+.correct-input {
+    border-color: green;
+    background-color: #51F366;
+}
+
+.incorrect-input {
+    border-color: red;
+    background-color: #FF8187;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    touch-action: manipulation;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#skipButton {
+    background-color: #f44336;
+}
+
+#skipButton:hover {
+    background-color: #e53935;
+}
+
+#prevButton {
+    background-color: #ff9800;
+}
+
+#prevButton:hover {
+    background-color: #fb8c00;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.feedback.correct {
+    color: green;
+}
+
+.feedback.incorrect {
+    color: red;
+}
+
+.translation {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.stats {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #f44336;
+    text-align: center;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.hint-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fffde7;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.hint-item {
+    margin: 5px 0;
+    padding: 3px;
+}
+
+.correct-word {
+    color: #099403;
+    font-weight: bold;
+}
+
+.incorrect-word {
+    color: #A20C0F;
+    position: relative;
+    text-decoration: none;
+}
+
+.incorrect-word::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #ffeb3b;
+    border-radius: 2px;
+}
+
+#progressContainer {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    height: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+#progressContainer:not(.hidden) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#progressText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #333;
+}
+
+#minHiddenWords {
+    padding: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.text-container {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+    display: inline-block;
+    padding: 15px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+                0 0 10px rgba(66, 135, 245, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    overflow: hidden;
+    animation: glow 3s ease-in-out infinite alternate;
+}
+
+.text-container input:focus {
+    outline: none;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+                    0 0 5px rgba(66, 135, 245, 0.3),
+                    inset 0 2px 5px rgba(255, 255, 255, 0.5);
+    }
+    to {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+                    0 0 20px rgba(66, 135, 245, 0.7),
+                    inset 0 2px 5px rgba(255, 255, 255, 0.7);
+    }
+}
+
+.text-container::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, #4facfe, #00f2fe, #4facfe, #00f2fe);
+    z-index: -1;
+    border-radius: 17px;
+    filter: blur(10px);
+    opacity: 0.7;
+    animation: rotateGradient 6s linear infinite;
+}
+
+@keyframes rotateGradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.text-container span {
+    margin-right: 0;
+    display: inline;
+    word-spacing: 0.1em;
+}
+
+.text-container input {
+    font-size: 20px;
+    padding: 2px 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin: 0 2px;
+    vertical-align: baseline;
+    display: inline-block;
+}
+
+#hiddenRatio {
+    width: 100px;
+    vertical-align: middle;
+}
+
+#hiddenRatioValue {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.mistake-stats {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.mistake-box {
+    max-height: 150px;
+    width: 100%;
+    max-width: 500px;
+    overflow-y: auto;
+    background-color: #ffebee;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+}
+
+.mistake-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mistake-box li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mistake-box li:last-child {
+    border-bottom: none;
+}
+
+.mistake-box li span.word {
+    font-weight: bold;
+    color: #d32f2f;
+}
+
+.mistake-box li span.stats {
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+        width: 95%;
+    }
+
+    .deck-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .deck-selector select, #minHiddenWords, #hiddenRatio, #jumpToInput {
+        width: 100%;
+        max-width: 200px;
+        margin: 5px 0;
+    }
+
+    .deck-selector label {
+        font-size: 14px;
+    }
+
+    #jumpToButton {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .text-container {
+        font-size: 18px;
+    }
+
+    .text-container input {
+        font-size: 18px;
+    }
+
+    button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .stats, .mistake-stats {
+        font-size: 12px;
+    }
+
+    .mistake-box li {
+        font-size: 12px;
+    }
+}

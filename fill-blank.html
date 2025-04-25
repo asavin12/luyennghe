@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📖 Điền Ô Trống Tiếng Đức</title>
+    <link rel="stylesheet" href="fill-blank.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link">Home</a>
+        <div class="deck-selector">
+            <strong style="font-size: 18px;">Chọn bộ thẻ: </strong>
+            <select id="deckSelect">
+                <option value="">Nhấn Vào Đây!</option>
+            </select>
+            <label style="margin-left: 10px;">Số từ ẩn tối thiểu: </label>
+            <select id="minHiddenWords">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <label style="margin-left: 10px;">Tỷ lệ từ ẩn: </label>
+            <input type="range" id="hiddenRatio" min="10" max="100" value="30" step="10" style="margin-left: 5px;">
+            <span id="hiddenRatioValue">30%</span>
+            <div class="jump-to-container">
+                <input type="number" id="jumpToInput" placeholder="Nhập số câu" min="1">
+                <button id="jumpToButton">Đi đến</button>
+            </div>
+        </div>
+        
+        <div id="progressContainer" class="hidden">
+            <div id="progressBar" class="progress-bar"></div>
+            <span id="progressText">0%</span>
+        </div>
+        
+        <div id="errorMessage" class="error"></div>
+        
+        <div id="storyContainer" class="hidden">
+            <div class="audio-controls">
+                <audio id="audioPlayer" controls playsinline></audio>
+                <div class="progress">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                </div>
+                <div class="loop-controls">
+                    <label class="switch">
+                        <input type="checkbox" id="repeatToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Lặp toàn bộ</span>
+                </div>
+            </div>
+
+            <div id="textContainer" class="text-container"></div>
+            
+            <div class="button-group">
+                <button id="prevButton">Câu trước</button>
+                <button id="checkButton">Kiểm tra</button>
+                <button id="translateButton">Dịch</button>
+                <button id="skipButton">Câu tiếp theo</button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+            <div id="translation" class="translation hidden"></div>
+            <p id="progressDisplay">Câu: 1/1</p>
+            <div class="stats">
+                <p>Thống kê: 
+                    <span id="correctCount">0</span> đúng • 
+                    <span id="incorrectCount">0</span> sai
+                </p>
+                <div id="mistakeStats" class="mistake-stats hidden">
+                    <p><strong>Từ hay sai:</strong></p>
+                    <div class="mistake-box">
+                        <ul id="mistakeList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="fill-blank.js"></script>
+</body>
+</html>

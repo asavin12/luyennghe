@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📖 Luyện Nghe và Viết Tiếng Đức</title>
+    <link rel="stylesheet" href="listen-write.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link">Home</a>
+        <div class="deck-selector">
+            <strong style="font-size: 18px;">Chọn bộ thẻ:  </strong>
+            <select id="deckSelect">
+                <option value="">Nhấn Vào Đây!</option>
+            </select>
+            <div class="jump-to-container">
+                <input type="number" id="jumpToInput" placeholder="Nhập số câu" min="1">
+                <button id="jumpToButton">Đi đến</button>
+            </div>
+        </div>
+
+        <div id="progressContainer" class="hidden">
+            <div id="progressBar" class="progress-bar"></div>
+            <span id="progressText">0%</span>
+        </div>
+
+        <div id="errorMessage" class="error"></div>
+        
+        <div id="storyContainer" class="hidden">
+            <div class="audio-controls">
+                <audio id="audioPlayer" controls playsinline></audio>
+                <div class="progress">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                </div>
+                <div class="loop-controls">
+                    <button id="startLoopButton"><</button>
+                    <button id="endLoopButton">></button>
+                    <button id="playLoopButton">Phát đoạn lặp</button>
+                    <button id="clearLoopButton">Clear</button>
+                    <label class="switch">
+                        <input type="checkbox" id="repeatToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Lặp toàn bộ</span>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <textarea id="dictationInput" class="form-control dictation__input" placeholder="Nhập nội dung bạn nghe được..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
+                <div id="highlight" class="highlight"></div>
+            </div>
+            <div id="completionMessage" style="display: none; text-align: center; font-size: 20px; color: green; margin-top: 20px;">
+                🎉 Đã hoàn thành bài, vui lòng chọn bài luyện tập khác! 🎉
+            </div>
+
+            <div class="button-group">
+                <button id="checkButton">Kiểm tra</button>
+                <button id="translateButton">Dịch</button>
+                <button id="prevButton">Câu trước</button>
+                <button id="skipButton">Câu tiếp theo</button>
+                <button id="reloadButton" style="display: none; margin-top: 10px;">Chọn Bài tiếp theo nào</button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+            <div id="translation" class="translation hidden"></div>
+            <p id="progressDisplay">Câu: 1/1</p>
+            <div class="stats">
+                <p>Thống kê: 
+                    <span id="correctCount">0</span> đúng • 
+                    <span id="incorrectCount">0</span> sai
+                </p>
+                <div id="wrongWordsStats" class="wrong-words-stats">
+                    <h3>Từ sai:</h3>
+                    <ul id="wrongWordsList"></ul>
+                </div>
+                <div id="mistakeStats" class="mistake-stats hidden">
+                    <p><strong>Từ hay sai:</strong></p>
+                    <div class="mistake-box">
+                        <ul id="mistakeList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="listen-write.js"></script>
+</body>
+</html>

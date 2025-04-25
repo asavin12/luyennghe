@@ -1,0 +1,490 @@
+body {
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+.container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.home-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+.home-link:hover {
+    background-color: #45a049;
+}
+
+.deck-selector {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.deck-selector select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.jump-to-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#jumpToInput {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100px;
+    text-align: center;
+}
+
+#jumpToButton {
+    padding: 8px 16px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    touch-action: manipulation;
+}
+
+#jumpToButton:hover {
+    background-color: #1976D2;
+}
+
+.hidden {
+    display: none;
+}
+
+.audio-controls {
+    margin-bottom: 15px;
+}
+
+.audio-controls audio {
+    width: 100%;
+}
+
+.progress {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.dictation__input {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 18px;
+    line-height: 1.5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: transparent;
+    color: transparent;
+    caret-color: black;
+    resize: none;
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+.highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 18px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+.incorrect-word {
+    color: #d32f2f;
+    text-decoration: none;
+}
+
+.correct-word {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    touch-action: manipulation;
+    min-width: 100px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#skipButton {
+    background-color: #f44336;
+}
+
+#skipButton:hover {
+    background-color: #e53935;
+}
+
+#prevButton {
+    background-color: #ff9800;
+}
+
+#prevButton:hover {
+    background-color: #fb8c00;
+}
+
+#progressContainer {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    height: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+#progressContainer:not(.hidden) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#progressText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #333;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.feedback.correct {
+    color: green;
+}
+
+.translation {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.stats {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.wrong-words-stats {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.wrong-words-stats h3 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.wrong-words-stats ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wrong-words-stats li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.mistake-stats {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.mistake-box {
+    max-height: 150px;
+    width: 100%;
+    max-width: 500px;
+    overflow-y: auto;
+    background-color: #ffebee;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+}
+
+.mistake-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mistake-box li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.mistake-box li:last-child {
+    border-bottom: none;
+}
+
+.mistake-box li span.word {
+    font-weight: bold;
+    color: #d32f2f;
+}
+
+.mistake-box li span.stats {
+    color: #333;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.hint-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fffde7;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.hint-item {
+    margin: 5px 0;
+    padding: 3px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 10px;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+.loop-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.loop-controls button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.loop-controls button:hover {
+    background-color: #1976D2;
+}
+
+#playLoopButton {
+    background-color: #4CAF50;
+}
+
+#playLoopButton:hover {
+    background-color: #45a049;
+}
+
+textarea, .highlight {
+    box-sizing: border-box;
+}
+
+.hint-char {
+    color: #a020f0;
+    animation: blink 1s infinite;
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 10px;
+        width: 95%;
+    }
+
+    .deck-selector strong {
+        font-size: 16px;
+    }
+
+    .jump-to-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    #jumpToInput {
+        width: 80px;
+        font-size: 14px;
+    }
+
+    #jumpToButton {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .dictation__input, .highlight {
+        font-size: 16px;
+        height: 80px;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 14px;
+        min-width: 80px;
+    }
+
+    .loop-controls button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .stats, .wrong-words-stats, .mistake-stats {
+        font-size: 12px;
+    }
+
+    .wrong-words-stats h3, .translation, .feedback, .hint-container {
+        font-size: 14px;
+    }
+
+    .mistake-box li {
+        font-size: 12px;
+    }
+}

@@ -152,6 +152,27 @@ body {
     font-weight: bold;
 }
 
+/* --- Start: CSS được thêm/cập nhật cho gợi ý --- */
+.incorrect-word-hint {
+    background-color: #fffde7; /* Nền màu vàng nhạt */
+    border: 1px solid #ffc107; /* Viền màu hổ phách */
+    border-radius: 4px;
+    padding: 1px 3px;
+    display: inline-block;
+}
+
+.incorrect-word-hint .user-word {
+    color: #d32f2f; /* Màu đỏ cho từ sai của người dùng */
+    text-decoration: line-through;
+}
+
+.incorrect-word-hint .correct-word-suggestion {
+    color: #2e7d32; /* Màu xanh cho từ đúng */
+    font-weight: bold;
+    margin-left: 4px;
+}
+/* --- End: CSS được thêm/cập nhật cho gợi ý --- */
+
 .button-group {
     display: flex;
     gap: 10px;

@@ -9,8 +9,8 @@ const repeatToggle = document.getElementById('repeatToggle');
 repeatToggle.checked = true;
 let loopStartTime = 0;
 let loopEndTime = 0;
-let loopInterval = null;
 let isLooping = false;
+let isSeeking = false; // Cờ để nhận biết người dùng có đang tua không
 let hintTimeout;
 let blinkInterval;
 
@@ -134,7 +134,6 @@ function loadStory() {
     audioPlayer.onloadedmetadata = () => {
         document.getElementById('duration').textContent = formatTime(audioPlayer.duration);
     };
-    updateAudioTime();
     audioPlayer.play();
 
     document.getElementById('progressDisplay').textContent = `Câu: ${currentIndex + 1}/${currentNotes.length}`;
@@ -145,10 +144,12 @@ function loadStory() {
     document.getElementById('translation').classList.add('hidden');
     loopStartTime = 0;
     loopEndTime = 0;
-    if (loopInterval) {
-        cancelAnimationFrame(loopInterval);
-        isLooping = false;
-    }
+    isLooping = false;
+    
+    const playLoopButton = document.getElementById('playLoopButton');
+    playLoopButton.textContent = 'Phát đoạn lặp';
+    playLoopButton.style.backgroundColor = '#4CAF50';
+
 
     document.getElementById('dictationInput').addEventListener('input', updateHighlight);
     updateWrongWordsStats();
@@ -160,15 +161,6 @@ function formatTime(seconds) {
     const secs = Math.floor(seconds % 60);
     const millis = Math.floor((seconds % 1) * 1000);
     return `${minutes}:${secs.toString().padStart(2, '0')}.${millis.toString().padStart(3, '0')}`;
-}
-
-function updateAudioTime() {
-    const audioPlayer = document.getElementById('audioPlayer');
-    function updateTime() {
-        document.getElementById('currentTime').textContent = formatTime(audioPlayer.currentTime);
-        requestAnimationFrame(updateTime);
-    }
-    requestAnimationFrame(updateTime);
 }
 
 function cleanText(text) {
@@ -185,8 +177,6 @@ function removePunctuation(text) {
 
 function updateHighlight() {
     let userText = document.getElementById('dictationInput').value;
-    userText = cleanText(userText);
-
     document.getElementById('highlight').innerHTML = userText;
 
     const dictationInput = document.getElementById('dictationInput');
@@ -220,7 +210,7 @@ document.getElementById('checkButton').addEventListener('click', () => {
     
     let firstErrorIndex = -1;
     for (let i = 0; i < Math.max(userWords.length, correctWords.length); i++) {
-        if ((userWords[i] || "") !== (correctWords[i] || "")) {
+        if ((userWords[i] || "").toLowerCase() !== (correctWords[i] || "").toLowerCase()) {
             firstErrorIndex = i;
             break;
         }
@@ -232,40 +222,44 @@ document.getElementById('checkButton').addEventListener('click', () => {
     const originalCorrectWords = correctText.split(/\s+/);
 
     totalAttempts++;
+    if (userText.trim() === '') {
+        firstErrorIndex = 0; 
+    }
+    
     if (firstErrorIndex >= 0) {
         let highlightHTML = '';
+        const userWord = originalUserWords[firstErrorIndex] || '';
+        const correctWordForHint = originalCorrectWords[firstErrorIndex] || '';
+
         for (let i = 0; i < originalUserWords.length; i++) {
             if (i === firstErrorIndex) {
-                highlightHTML += `<span class="incorrect-word">${originalUserWords[i] || ''}</span>`;
+                highlightHTML += `<span class="incorrect-word-hint"><span class="user-word">${userWord}</span> → <span class="correct-word-suggestion">${correctWordForHint}</span></span>`;
             } else {
-                highlightHTML += originalUserWords[i] || '';
+                highlightHTML += originalUserWords[i];
             }
             if (i < originalUserWords.length - 1) highlightHTML += ' ';
         }
+        
         highlight.innerHTML = highlightHTML;
 
         wrongWords.push({
-            wrong: originalUserWords[firstErrorIndex] || '',
-            correct: originalCorrectWords[firstErrorIndex] || ''
+            wrong: userWord,
+            correct: correctWordForHint
         });
 
-        const correctWord = originalCorrectWords[firstErrorIndex] || '';
-        mistakeLog[correctWord] = (mistakeLog[correctWord] || 0) + 1;
+        const correctWordForStats = originalCorrectWords[firstErrorIndex] || '';
+        mistakeLog[correctWordForStats] = (mistakeLog[correctWordForStats] || 0) + 1;
 
-        feedback.innerHTML = `
-            <div class="hint-container">
-                <div class="hint-item">
-                    <span class="correct-word">${originalCorrectWords[firstErrorIndex] || ''}</span>
-                </div>
-            </div>
-        `;
+        feedback.innerHTML = ''; 
         stats.incorrect++;
 
         const wordsBeforeError = originalUserWords.slice(0, firstErrorIndex).join(' ');
-        const cursorPosition = wordsBeforeError.length + (wordsBeforeError.length > 0 ? 1 : 0) + (originalUserWords[firstErrorIndex] || '').length;
+        const cursorPosition = wordsBeforeError.length + (wordsBeforeError.length > 0 ? 1 : 0);
         dictationInput.focus();
-        dictationInput.setSelectionRange(cursorPosition, cursorPosition);
+        const incorrectWordLength = userWord.length;
+        dictationInput.setSelectionRange(cursorPosition, cursorPosition + incorrectWordLength);
         dictationInput.scrollTop = dictationInput.scrollHeight;
+
     } else {
         feedback.innerHTML = '<div class="correct">Chính xác!</div>';
         highlight.innerHTML = userText;
@@ -378,30 +372,24 @@ document.getElementById('endLoopButton').addEventListener('click', () => {
 
 document.getElementById('playLoopButton').addEventListener('click', () => {
     const audioPlayer = document.getElementById('audioPlayer');
+    const playLoopButton = document.getElementById('playLoopButton');
+
     if (loopStartTime >= loopEndTime) {
         alert('Vui lòng đặt điểm lặp hợp lệ');
         return;
     }
 
+    isLooping = !isLooping;
+
     if (isLooping) {
-        isLooping = false;
-        cancelAnimationFrame(loopInterval);
-        return;
+        audioPlayer.currentTime = loopStartTime;
+        audioPlayer.play();
+        playLoopButton.textContent = 'Dừng lặp';
+        playLoopButton.style.backgroundColor = '#f44336';
+    } else {
+        playLoopButton.textContent = 'Phát đoạn lặp';
+        playLoopButton.style.backgroundColor = '#4CAF50';
     }
-
-    isLooping = true;
-    audioPlayer.currentTime = loopStartTime;
-    audioPlayer.play();
-
-    const checkLoop = () => {
-        if (!isLooping) return;
-        if (audioPlayer.currentTime >= loopEndTime) {
-            audioPlayer.currentTime = loopStartTime;
-            audioPlayer.play();
-        }
-        loopInterval = requestAnimationFrame(checkLoop);
-    };
-    checkLoop();
 });
 
 document.getElementById('audioPlayer').loop = true;
@@ -411,16 +399,18 @@ repeatToggle.addEventListener('change', function() {
 });
 
 document.getElementById('clearLoopButton').addEventListener('click', () => {
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playLoopButton = document.getElementById('playLoopButton');
+    
     loopStartTime = 0;
     loopEndTime = 0;
-    const audioPlayer = document.getElementById('audioPlayer');
+    isLooping = false;
+    
     audioPlayer.pause();
     audioPlayer.currentTime = 0;
-    if (loopInterval) {
-        cancelAnimationFrame(loopInterval);
-        loopInterval = null;
-    }
-    isLooping = false;
+
+    playLoopButton.textContent = 'Phát đoạn lặp';
+    playLoopButton.style.backgroundColor = '#4CAF50';
 });
 
 function startHintTimer() {
@@ -476,4 +466,34 @@ document.getElementById('dictationInput').addEventListener('input', () => {
 
 document.addEventListener("DOMContentLoaded", function () {
     loadDecks();
+
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    // Lắng nghe sự kiện 'seeking' để biết người dùng đang tua
+    audioPlayer.addEventListener('seeking', () => {
+        isSeeking = true;
+    });
+
+    // Lắng nghe sự kiện 'seeked' để biết người dùng đã tua xong
+    audioPlayer.addEventListener('seeked', () => {
+        isSeeking = false;
+    });
+    
+    audioPlayer.addEventListener('timeupdate', () => {
+        // Cập nhật hiển thị thời gian hiện tại
+        document.getElementById('currentTime').textContent = formatTime(audioPlayer.currentTime);
+
+        // Không áp dụng logic lặp lại khi người dùng đang tua
+        if (isSeeking) {
+            return;
+        }
+
+        // Xử lý logic lặp lại
+        if (isLooping && loopEndTime > 0 && audioPlayer.currentTime >= loopEndTime) {
+            // Đặt lại thời gian về đầu đoạn lặp
+            audioPlayer.currentTime = loopStartTime;
+            // Gọi play() để đảm bảo audio tiếp tục phát ổn định trên các trình duyệt
+            audioPlayer.play();
+        }
+    });
 });
